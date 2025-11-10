@@ -38,7 +38,7 @@ const mockPlays = [
     ]
   },
   {
-    title: "1st & 10 @ WKU 22 (7:30 1Q)",
+    title: "1st & 10 @ WKU 34 (8:10 1Q)",
     details: "Penalty: Holding, Offense #68 (10 yards).",
     notes: [
       {
@@ -48,7 +48,12 @@ const mockPlays = [
     ]
   },
   {
-    title: "3rd & 13 @ WKU 25 (6:45 1Q)",
+    title: "1st & 20 @ WKU 44 (8:00 1Q)",
+    details: "J. Emery rush up the middle for 7 yards. Tackled at the WKU 37.",
+    notes: []
+  },
+  {
+    title: "2nd & 13 @ WKU 37 (7:25 1Q)",
     details: "J. Daniels pass complete to B. Nabers for 14 yards. First down LSU.",
     notes: [
       {
@@ -58,7 +63,17 @@ const mockPlays = [
     ]
   },
   {
-    title: "2nd & Goal @ WKU 5 (6:00 1Q)",
+    title: "1st & 10 @ WKU 23 (6:55 1Q)",
+    details: "J. Emery rush to the right for 8 yards, tackled at the WKU 15.",
+    notes: []
+  },
+  {
+    title: "2nd & 2 @ WKU 15 (6:30 1Q)",
+    details: "Quick pass to B. Nabers for 10 yards. First down LSU.",
+    notes: []
+  },
+  {
+    title: "1st & Goal @ WKU 5 (6:10 1Q)",
     details: "J. Daniels pass to M. Thomas in the corner of the end zone. TOUCHDOWN LSU!",
     notes: [
       {
@@ -68,11 +83,12 @@ const mockPlays = [
     ]
   },
   {
-    title: "EXTRA POINT (5:55 1Q)",
+    title: "EXTRA POINT (6:05 1Q)",
     details: "K. Ramos kick is GOOD. LSU leads 7-0.",
     notes: []
   }
 ];
+
 
 const feedContainer = document.getElementById("live-feed-container");
 let playIndex = 0;
