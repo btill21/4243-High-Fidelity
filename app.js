@@ -72,32 +72,32 @@ const footballTerms = {
 function highlightTerms(text) {
   let processedText = text;
   const termPatterns = Object.keys(footballTerms).sort((a, b) => b.length - a.length);
-  
+
   termPatterns.forEach(term => {
     const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`\\b${escapedTerm}\\b`, 'gi');
-    
+
     processedText = processedText.replace(regex, (match, offset, string) => {
       const beforeMatch = string.substring(Math.max(0, offset - 200), offset);
       const lastOpenSpan = beforeMatch.lastIndexOf('<span');
       const lastCloseSpan = beforeMatch.lastIndexOf('</span>');
-      
+
       if (lastOpenSpan > lastCloseSpan) {
         return match;
       }
-      
+
       const termKey = Object.keys(footballTerms).find(
         k => k.toLowerCase() === term.toLowerCase()
       );
       const termData = footballTerms[termKey];
-      
+
       if (termData) {
         return `<span class="football-term" data-term="${termData.term}" data-definition="${termData.definition.replace(/"/g, '&quot;')}">${match}</span>`;
       }
       return match;
     });
   });
-  
+
   return processedText;
 }
 
@@ -200,9 +200,9 @@ let playIndex = 0;
 function createPlayCard(playData) {
   const card = document.createElement("div");
   card.classList.add("feed-card");
-  
+
   const highlightedDetails = highlightTerms(playData.details);
-  
+
   card.innerHTML = `
     <h3>${playData.title}</h3>
     <p>${highlightedDetails}</p>
@@ -242,7 +242,8 @@ function showTermDefinition(term, definition) {
     </div>
   `;
 
-  document.body.appendChild(modal);
+  const appContainer = document.querySelector('.mobile-app-container');
+  appContainer.appendChild(modal);
 
   const closeBtn = modal.querySelector('.term-modal-close');
   closeBtn.addEventListener('click', () => {
@@ -272,14 +273,85 @@ function addNextPlay() {
 }
 const playInterval = setInterval(addNextPlay, 5000);
 
-/* to implement:
-- hover functionality to show notes (contextual portion)
-- add scroll functionality
-- fix navbar
-- more plays
-- functionality to pause/resume feed
-- better styling/ui
-- different tabs, games, guide profile, etc..
 
+/* navigation + guide */
 
-*/
+const navGames = document.getElementById('nav-games');
+const navGuide = document.getElementById('nav-guide');
+const navProfile = document.getElementById('nav-profile');
+
+const liveFeedContainer = document.getElementById('live-feed-container');
+const guideView = document.getElementById('guide-view');
+const feedHeader = document.querySelector('.feed-header');
+
+function switchTab(tab) {
+  navGames.classList.remove('active');
+  navGuide.classList.remove('active');
+  navProfile.classList.remove('active');
+  liveFeedContainer.classList.add('hidden');
+  guideView.classList.add('hidden');
+  feedHeader.classList.add('hidden');
+
+  if (tab === 'games') {
+    navGames.classList.add('active');
+    liveFeedContainer.classList.remove('hidden');
+    feedHeader.classList.remove('hidden');
+  } else if (tab === 'guide') {
+    navGuide.classList.add('active');
+    guideView.classList.remove('hidden');
+    renderGuide();
+  } else if (tab === 'profile') {
+    navProfile.classList.add('active');
+  }
+}
+
+navGames.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchTab('games');
+});
+
+navGuide.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchTab('guide');
+});
+
+navProfile.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchTab('profile');
+});
+
+function renderGuide() {
+  const guideContent = document.querySelector('.guide-content');
+  if (guideContent.children.length > 0) return;
+
+  const categories = {
+    "Offense": ["YAC", "Scramble", "First Down", "Play-Action", "Slant", "Touchdown"],
+    "Defense": ["Tackled"],
+    "Penalties": ["Holding", "Penalty"]
+  };
+
+  for (const [category, terms] of Object.entries(categories)) {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.classList.add('guide-category');
+
+    const title = document.createElement('h3');
+    title.textContent = category;
+    categoryDiv.appendChild(title);
+
+    terms.forEach(termKey => {
+      const realKey = Object.keys(footballTerms).find(k => k.toLowerCase() === termKey.toLowerCase());
+      if (realKey) {
+        const termData = footballTerms[realKey];
+        const termItem = document.createElement('div');
+        termItem.classList.add('term-item');
+        termItem.innerHTML = `
+          <h4>${termData.term}</h4>
+          <p>${termData.definition}</p>
+        `;
+        categoryDiv.appendChild(termItem);
+      }
+    });
+
+    guideContent.appendChild(categoryDiv);
+  }
+}

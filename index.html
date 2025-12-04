@@ -1,42 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Football Tracker</title>
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <div class="mobile-app-container">
 
-  <header id="scoreboard">
+    <header id="scoreboard">
+      <div class="team home">
+        <span class="team-name">LSU</span>
+        <span class="team-score">7</span>
+      </div>
+      <div class="game-info">
+        <span class="quarter">1st Qtr</span>
+        <span class="time">6:05</span>
+      </div>
+      <div class="team away">
+        <span class="team-score">0</span>
+        <span class="team-name">WKU</span>
+      </div>
+    </header>
 
-    <div class="score">
-      <div>LSU @ WKU </div>
-      
+    <div class="feed-header">
+      <h2 class="feed-title">Live Feed</h2>
+      <div class="live-indicator">
+        <span class="dot"></span> Live
+      </div>
     </div>
-  </header>
 
-  <h2 class="feed-title">--- Live Feed ---</h2>
+    <main id="live-feed-container"></main>
 
-  <main id="live-feed-container"></main>
+    <section id="guide-view" class="hidden">
+      <div class="guide-content">
+      </div>
+    </section>
 
+    <nav id="nav-bar">
+      <a href="#" id="nav-games" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        Games
+      </a>
 
-  <nav id="nav-bar">
-    <a href="#">Games</a>
-    
-     <!-- This is the container for the tooltip -->
-<div class="tooltip-container">
-  <a href="#">Guide</a>
-  <span class="tooltip-text">View the TV/Streaming Guide</span>
-</div>
-    <a href="#">Profile</a>
-  </nav>
+      <div class="tooltip-container">
+        <a href="#" id="nav-guide" class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          Guide
+        </a>
+        <span class="tooltip-text">View Guide</span>
+      </div>
 
-</div>
+      <a href="#" id="nav-profile" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        Profile
+      </a>
+    </nav>
+
+  </div>
 
   <script src="app.js"></script>
 </body>
+
 </html>
