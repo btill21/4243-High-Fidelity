@@ -1,3 +1,6 @@
+/* =========================================
+   1. FOOTBALL TERMS DICTIONARY
+   ========================================= */
 const footballTerms = {
   "YAC": {
     term: "YAC",
@@ -69,6 +72,9 @@ const footballTerms = {
   }
 };
 
+/* =========================================
+   2. TEXT PARSER (HIGHLIGHTER)
+   ========================================= */
 function highlightTerms(text) {
   let processedText = text;
   const termPatterns = Object.keys(footballTerms).sort((a, b) => b.length - a.length);
@@ -101,19 +107,14 @@ function highlightTerms(text) {
   return processedText;
 }
 
-// mock data for the live feed
-// notes are for when you hover over something specific and you will be able
-// see more details ( the contextual portion - to be implemented)
+/* =========================================
+   3. MOCK DATA (THE PLAYS)
+   ========================================= */
 const mockPlays = [
   {
     title: "1st & 10 @ LSU 25 (10:05 1Q)",
     details: "J. Daniels pass complete to M. Thomas to the left for 15 yards.",
-    notes: [
-      {
-        label: "YAC",
-        value: "8 yards after catch — Thomas broke a tackle near the sideline."
-      }
-    ]
+    notes: [{ label: "YAC", value: "8 yards after catch." }]
   },
   {
     title: "1st & 10 @ LSU 40 (9:40 1Q)",
@@ -123,32 +124,17 @@ const mockPlays = [
   {
     title: "2nd & 4 @ LSU 46 (9:10 1Q)",
     details: "Play-action pass. J. Daniels scrambles right for 8 yards and steps out of bounds.",
-    notes: [
-      {
-        label: "Scramble",
-        value: "No receivers open; Daniels gained 8 yards with his legs."
-      }
-    ]
+    notes: [{ label: "Scramble", value: "No receivers open." }]
   },
   {
     title: "1st & 10 @ WKU 46 (8:50 1Q)",
     details: "J. Daniels pass complete to B. Nabers on a slant for 12 yards. First down LSU.",
-    notes: [
-      {
-        label: "YAC",
-        value: "5 yards after catch — Nabers turned upfield quickly through a gap."
-      }
-    ]
+    notes: []
   },
   {
     title: "1st & 10 @ WKU 34 (8:10 1Q)",
     details: "Penalty: Holding, Offense #68 (10 yards).",
-    notes: [
-      {
-        label: "Penalty",
-        value: "Left guard was flagged for holding the defender during a rush attempt."
-      }
-    ]
+    notes: []
   },
   {
     title: "1st & 20 @ WKU 44 (8:00 1Q)",
@@ -158,12 +144,7 @@ const mockPlays = [
   {
     title: "2nd & 13 @ WKU 37 (7:25 1Q)",
     details: "J. Daniels pass complete to B. Nabers for 14 yards. First down LSU.",
-    notes: [
-      {
-        label: "YAC",
-        value: "10 yards after catch — Nabers made two defenders miss on the way to the marker."
-      }
-    ]
+    notes: []
   },
   {
     title: "1st & 10 @ WKU 23 (6:55 1Q)",
@@ -178,12 +159,7 @@ const mockPlays = [
   {
     title: "1st & Goal @ WKU 5 (6:10 1Q)",
     details: "J. Daniels pass to M. Thomas in the corner of the end zone. TOUCHDOWN LSU!",
-    notes: [
-      {
-        label: "Play Design",
-        value: "Fade route to isolate Thomas one-on-one against the corner."
-      }
-    ]
+    notes: []
   },
   {
     title: "EXTRA POINT (6:05 1Q)",
@@ -192,8 +168,9 @@ const mockPlays = [
   }
 ];
 
-
-
+/* =========================================
+   4. FEED GENERATION LOGIC
+   ========================================= */
 const feedContainer = document.getElementById("live-feed-container");
 let playIndex = 0;
 
@@ -208,6 +185,7 @@ function createPlayCard(playData) {
     <p>${highlightedDetails}</p>
   `;
 
+  // Add click listeners to the terms inside this card
   const terms = card.querySelectorAll('.football-term');
   terms.forEach(termSpan => {
     termSpan.addEventListener('click', (e) => {
@@ -223,9 +201,7 @@ function createPlayCard(playData) {
 
 function showTermDefinition(term, definition) {
   const existingModal = document.getElementById('term-modal');
-  if (existingModal) {
-    existingModal.remove();
-  }
+  if (existingModal) existingModal.remove();
 
   const modal = document.createElement('div');
   modal.id = 'term-modal';
@@ -246,19 +222,12 @@ function showTermDefinition(term, definition) {
   appContainer.appendChild(modal);
 
   const closeBtn = modal.querySelector('.term-modal-close');
-  closeBtn.addEventListener('click', () => {
-    modal.remove();
-  });
-
+  closeBtn.addEventListener('click', () => modal.remove());
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.remove();
-    }
+    if (e.target === modal) modal.remove();
   });
 
-  setTimeout(() => {
-    modal.classList.add('show');
-  }, 10);
+  setTimeout(() => { modal.classList.add('show'); }, 10);
 }
 
 function addNextPlay() {
@@ -271,10 +240,14 @@ function addNextPlay() {
     clearInterval(playInterval);
   }
 }
+
+// Start adding plays every 5 seconds
 const playInterval = setInterval(addNextPlay, 5000);
 
 
-/* navigation + guide */
+/* =========================================
+   5. NAVIGATION + TABS + PROFILE (UPDATED)
+   ========================================= */
 
 const navGames = document.getElementById('nav-games');
 const navGuide = document.getElementById('nav-guide');
@@ -282,16 +255,25 @@ const navProfile = document.getElementById('nav-profile');
 
 const liveFeedContainer = document.getElementById('live-feed-container');
 const guideView = document.getElementById('guide-view');
+// This is the new Profile View selector
+const profileView = document.getElementById('profile-view');
 const feedHeader = document.querySelector('.feed-header');
 
 function switchTab(tab) {
+  // 1. Reset all nav buttons
   navGames.classList.remove('active');
   navGuide.classList.remove('active');
   navProfile.classList.remove('active');
+
+  // 2. Hide ALL views
   liveFeedContainer.classList.add('hidden');
   guideView.classList.add('hidden');
   feedHeader.classList.add('hidden');
+  
+  // Safely hide profile view if it exists
+  if (profileView) profileView.classList.add('hidden');
 
+  // 3. Activate the chosen view
   if (tab === 'games') {
     navGames.classList.add('active');
     liveFeedContainer.classList.remove('hidden');
@@ -302,23 +284,13 @@ function switchTab(tab) {
     renderGuide();
   } else if (tab === 'profile') {
     navProfile.classList.add('active');
+    if (profileView) profileView.classList.remove('hidden');
   }
 }
 
-navGames.addEventListener('click', (e) => {
-  e.preventDefault();
-  switchTab('games');
-});
-
-navGuide.addEventListener('click', (e) => {
-  e.preventDefault();
-  switchTab('guide');
-});
-
-navProfile.addEventListener('click', (e) => {
-  e.preventDefault();
-  switchTab('profile');
-});
+navGames.addEventListener('click', (e) => { e.preventDefault(); switchTab('games'); });
+navGuide.addEventListener('click', (e) => { e.preventDefault(); switchTab('guide'); });
+navProfile.addEventListener('click', (e) => { e.preventDefault(); switchTab('profile'); });
 
 function renderGuide() {
   const guideContent = document.querySelector('.guide-content');
@@ -354,38 +326,38 @@ function renderGuide() {
 
     guideContent.appendChild(categoryDiv);
   }
-}/* --- GAME CLOCK LOGIC --- */
+}
 
-// 1. Select the time element from the HTML
+/* =========================================
+   6. GAME CLOCK LOGIC (NEW)
+   ========================================= */
+
 const timeDisplay = document.querySelector('.time');
-
-// 2. Set the starting time (Matches your HTML "6:05")
 let gameMinutes = 6;
 let gameSeconds = 5;
 
 function updateClock() {
-  // Decrease seconds by 1
   gameSeconds--;
 
-  // If seconds hit less than 0, restart seconds at 59 and lower the minute
+  // If seconds drop below 0, roll over to 59 and decrease minute
   if (gameSeconds < 0) {
     gameSeconds = 59;
     gameMinutes--;
   }
 
-  // If the clock finishes (0:00), stop the timer
+  // If minutes drop below 0, stop the game
   if (gameMinutes < 0) {
     clearInterval(clockTimer);
-    timeDisplay.textContent = "0:00"; // Force display to 0:00
+    if(timeDisplay) timeDisplay.textContent = "0:00";
     return;
   }
 
-  // Formatting: Add a "0" in front if seconds are single digit (e.g., "5:09" instead of "5:9")
+  // Format seconds to always have two digits (e.g. "09" not "9")
   const formattedSeconds = gameSeconds < 10 ? `0${gameSeconds}` : gameSeconds;
-
-  // Update the text on the screen
-  timeDisplay.textContent = `${gameMinutes}:${formattedSeconds}`;
+  
+  // Update screen only if the element exists
+  if(timeDisplay) timeDisplay.textContent = `${gameMinutes}:${formattedSeconds}`;
 }
 
-// 3. Start the interval (Run the function every 1000 milliseconds / 1 second)
+// Start the clock updates
 const clockTimer = setInterval(updateClock, 1000);
