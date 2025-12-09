@@ -11,52 +11,155 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="profile.css">
+  <link rel="stylesheet" href="auth.css">
+  <link rel="stylesheet" href="games.css">
 </head>
 
 <body>
 
   <div class="mobile-app-container">
 
-    <header id="scoreboard">
-      <div class="team home">
-        <span class="team-name">LSU</span>
-        <span class="team-score">7</span>
-      </div>
-      <div class="game-info">
-        <span class="quarter">1st Qtr</span>
-        <span class="time">6:05</span>
-      </div>
-      <div class="team away">
-        <span class="team-score">0</span>
-        <span class="team-name">WKU</span>
-      </div>
-    </header>
+    <div id="auth-view">
+      <div class="auth-content">
 
-    <div class="feed-header">
-      <h2 class="feed-title">Live Feed</h2>
-      <div class="live-indicator">
-        <span class="dot"></span> Live
+        <h1>StatTrack</h1>
+        <p>Your ultimate football companion</p>
+
+        <form id="auth-form">
+          <div class="input-group">
+            <input type="text" id="auth-name" placeholder="Your Name" required>
+          </div>
+          <div class="input-group">
+            <input type="text" id="auth-team" placeholder="Favorite Team (e.g. LSU)" required>
+          </div>
+          <button type="submit" class="auth-btn">Get Started</button>
+        </form>
       </div>
     </div>
 
-    <main id="live-feed-container"></main>
+    <section id="games-list-view" class="hidden">
+      <div class="games-list-header">
+        <h2>Live Games</h2>
+        <span class="live-badge">3 Live</span>
+      </div>
+
+      <div class="games-grid">
+        <div class="game-summary-card active-game" id="open-lsu-game">
+          <div class="card-status">
+            <span class="status-dot"></span> Live • 1st Qtr
+          </div>
+          <div class="card-matchup">
+            <div class="card-team">
+              <span class="card-team-code">LSU</span>
+              <span class="card-team-score">7</span>
+            </div>
+            <div class="card-vs">vs</div>
+            <div class="card-team">
+              <span class="card-team-code">WKU</span>
+              <span class="card-team-score">0</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>6:05 Remaining</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" />
+              <path d="M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="game-summary-card">
+          <div class="card-status">
+            <span class="status-dot"></span> Live • 3rd Qtr
+          </div>
+          <div class="card-matchup">
+            <div class="card-team">
+              <span class="card-team-code">ALA</span>
+              <span class="card-team-score">24</span>
+            </div>
+            <div class="card-vs">vs</div>
+            <div class="card-team">
+              <span class="card-team-code">TEX</span>
+              <span class="card-team-score">21</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>2:30 Remaining</span>
+          </div>
+        </div>
+
+        <div class="game-summary-card">
+          <div class="card-status">
+            <span class="status-dot"></span> Live • 2nd Qtr
+          </div>
+          <div class="card-matchup">
+            <div class="card-team">
+              <span class="card-team-code">UGA</span>
+              <span class="card-team-score">14</span>
+            </div>
+            <div class="card-vs">vs</div>
+            <div class="card-team">
+              <span class="card-team-code">FLA</span>
+              <span class="card-team-score">3</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>8:15 Remaining</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="game-detail-view" class="hidden">
+      <header id="scoreboard">
+        <button id="back-to-games" class="back-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <div class="team home">
+          <span class="team-name">LSU</span>
+          <span class="team-score">7</span>
+        </div>
+        <div class="game-info">
+          <span class="quarter">1st Qtr</span>
+          <span class="time">6:05</span>
+        </div>
+        <div class="team away">
+          <span class="team-score">0</span>
+          <span class="team-name">WKU</span>
+        </div>
+      </header>
+
+      <div class="feed-header">
+        <h2 class="feed-title">Live Feed</h2>
+        <div class="live-indicator">
+          <span class="dot"></span> Live
+        </div>
+      </div>
+
+      <main id="live-feed-container"></main>
+    </section>
 
     <section id="guide-view" class="hidden">
       <div class="guide-content">
       </div>
     </section>
 
-    <!-- PROFILE VIEW (NEW) -->
     <section id="profile-view" class="hidden">
       <div class="profile-header">
         <div class="profile-avatar">JD</div>
-        <h3>John Doe</h3>
+        <h3 id="profile-name">John Doe</h3>
         <p>LSU Fan • Alumni</p>
       </div>
 
       <div class="settings-group">
         <h4>Notifications</h4>
-        
+
         <div class="setting-item">
           <span>Game Start Alerts</span>
           <label class="switch">
@@ -86,9 +189,14 @@
         <h4>Preferences</h4>
         <div class="setting-item">
           <span>Favorite Team</span>
-          <span class="setting-value">LSU Tigers ></span>
+          <span class="setting-value" id="profile-team">LSU Tigers ></span>
         </div>
       </div>
+
+      <button id="btn-logout"
+        style="width: 100%; padding: 16px; background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); border-radius: 16px; font-weight: 700; cursor: pointer; margin-top: 20px;">
+        SIGN OUT
+      </button>
     </section>
 
     <nav id="nav-bar">

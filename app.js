@@ -253,10 +253,11 @@ const navGames = document.getElementById('nav-games');
 const navGuide = document.getElementById('nav-guide');
 const navProfile = document.getElementById('nav-profile');
 
-const liveFeedContainer = document.getElementById('live-feed-container');
+const gamesListView = document.getElementById('games-list-view');
+const gameDetailView = document.getElementById('game-detail-view');
 const guideView = document.getElementById('guide-view');
-// This is the new Profile View selector
 const profileView = document.getElementById('profile-view');
+const liveFeedContainer = document.getElementById('live-feed-container');
 const feedHeader = document.querySelector('.feed-header');
 
 function switchTab(tab) {
@@ -265,26 +266,22 @@ function switchTab(tab) {
   navGuide.classList.remove('active');
   navProfile.classList.remove('active');
 
-  // 2. Hide ALL views
-  liveFeedContainer.classList.add('hidden');
+  gamesListView.classList.add('hidden');
+  gameDetailView.classList.add('hidden');
   guideView.classList.add('hidden');
-  feedHeader.classList.add('hidden');
-  
-  // Safely hide profile view if it exists
-  if (profileView) profileView.classList.add('hidden');
+  profileView.classList.add('hidden');
 
   // 3. Activate the chosen view
   if (tab === 'games') {
     navGames.classList.add('active');
-    liveFeedContainer.classList.remove('hidden');
-    feedHeader.classList.remove('hidden');
+    gamesListView.classList.remove('hidden');
   } else if (tab === 'guide') {
     navGuide.classList.add('active');
     guideView.classList.remove('hidden');
     renderGuide();
   } else if (tab === 'profile') {
     navProfile.classList.add('active');
-    if (profileView) profileView.classList.remove('hidden');
+    profileView.classList.remove('hidden');
   }
 }
 
@@ -310,6 +307,7 @@ function renderGuide() {
     title.textContent = category;
     categoryDiv.appendChild(title);
 
+    const terms = categories[category];
     terms.forEach(termKey => {
       const realKey = Object.keys(footballTerms).find(k => k.toLowerCase() === termKey.toLowerCase());
       if (realKey) {
@@ -325,6 +323,101 @@ function renderGuide() {
     });
 
     guideContent.appendChild(categoryDiv);
+  }
+}
+
+/* Auth Logic */
+const authView = document.getElementById('auth-view');
+const authForm = document.getElementById('auth-form');
+const authNameInput = document.getElementById('auth-name');
+const authTeamInput = document.getElementById('auth-team');
+const scoreboard = document.getElementById('scoreboard');
+const navBar = document.getElementById('nav-bar');
+
+navBar.style.opacity = '0';
+
+authForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = authNameInput.value;
+  const team = authTeamInput.value;
+
+  document.getElementById('profile-name').textContent = name;
+  document.querySelector('.profile-avatar').textContent = getInitials(name);
+  document.getElementById('profile-team').textContent = team;
+
+  authView.style.opacity = '0';
+  setTimeout(() => {
+    authView.classList.add('hidden');
+    navBar.style.transition = 'opacity 0.5s';
+    navBar.style.opacity = '1';
+    switchTab('games');
+  }, 500);
+});
+
+/* Games Navigation Logic */
+const lsuGameCard = document.getElementById('open-lsu-game');
+const backToGamesBtn = document.getElementById('back-to-games');
+
+if (lsuGameCard) {
+  lsuGameCard.addEventListener('click', () => {
+    gamesListView.classList.add('hidden');
+    gameDetailView.classList.remove('hidden');
+  });
+}
+
+if (backToGamesBtn) {
+  backToGamesBtn.addEventListener('click', () => {
+    gameDetailView.classList.add('hidden');
+    gamesListView.classList.remove('hidden');
+  });
+}
+
+const notifBtn = document.getElementById('btn-notifications');
+if (notifBtn) {
+  notifBtn.addEventListener('click', () => {
+    const toggle = notifBtn.querySelector('.toggle-switch');
+    toggle.classList.toggle('active');
+  });
+}
+
+const logoutBtn = document.getElementById('btn-logout');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    authView.classList.remove('hidden');
+    void authView.offsetWidth;
+    authView.style.opacity = '1';
+
+    navBar.style.opacity = '0';
+
+    authNameInput.value = '';
+    authTeamInput.value = '';
+
+    document.getElementById('profile-name').textContent = 'John Doe';
+    document.querySelector('.profile-avatar').textContent = 'JD';
+    document.getElementById('profile-team').textContent = 'LSU Tigers >';
+    learnedTerms.clear();
+
+    switchTab('games');
+  });
+}
+
+function getInitials(name) {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+    .substring(0, 2);
+}
+
+/* User Stats Logic */
+const learnedTerms = new Set();
+
+function trackTermLearned(term) {
+  if (!learnedTerms.has(term)) {
+    learnedTerms.add(term);
+    const termStat = document.getElementById('profile-terms');
+    if (termStat) termStat.textContent = learnedTerms.size;
   }
 }
 
@@ -348,15 +441,15 @@ function updateClock() {
   // If minutes drop below 0, stop the game
   if (gameMinutes < 0) {
     clearInterval(clockTimer);
-    if(timeDisplay) timeDisplay.textContent = "0:00";
+    if (timeDisplay) timeDisplay.textContent = "0:00";
     return;
   }
 
   // Format seconds to always have two digits (e.g. "09" not "9")
   const formattedSeconds = gameSeconds < 10 ? `0${gameSeconds}` : gameSeconds;
-  
+
   // Update screen only if the element exists
-  if(timeDisplay) timeDisplay.textContent = `${gameMinutes}:${formattedSeconds}`;
+  if (timeDisplay) timeDisplay.textContent = `${gameMinutes}:${formattedSeconds}`;
 }
 
 // Start the clock updates
