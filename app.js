@@ -354,4 +354,38 @@ function renderGuide() {
 
     guideContent.appendChild(categoryDiv);
   }
+}/* --- GAME CLOCK LOGIC --- */
+
+// 1. Select the time element from the HTML
+const timeDisplay = document.querySelector('.time');
+
+// 2. Set the starting time (Matches your HTML "6:05")
+let gameMinutes = 6;
+let gameSeconds = 5;
+
+function updateClock() {
+  // Decrease seconds by 1
+  gameSeconds--;
+
+  // If seconds hit less than 0, restart seconds at 59 and lower the minute
+  if (gameSeconds < 0) {
+    gameSeconds = 59;
+    gameMinutes--;
+  }
+
+  // If the clock finishes (0:00), stop the timer
+  if (gameMinutes < 0) {
+    clearInterval(clockTimer);
+    timeDisplay.textContent = "0:00"; // Force display to 0:00
+    return;
+  }
+
+  // Formatting: Add a "0" in front if seconds are single digit (e.g., "5:09" instead of "5:9")
+  const formattedSeconds = gameSeconds < 10 ? `0${gameSeconds}` : gameSeconds;
+
+  // Update the text on the screen
+  timeDisplay.textContent = `${gameMinutes}:${formattedSeconds}`;
 }
+
+// 3. Start the interval (Run the function every 1000 milliseconds / 1 second)
+const clockTimer = setInterval(updateClock, 1000);
